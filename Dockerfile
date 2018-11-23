@@ -38,7 +38,7 @@ RUN useradd verdyr
 ## mapr specific, separately
 RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-librdkafka-0.11.3.201803231414-1.noarch.rpm
 RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-client-6.1.0.20180926230239.GA-1.x86_64.rpm
-RUN yum install -y http://archive.mapr.com/releases/MEP/${MEP_VERSION}/redhat/mapr-spark-master-2.3.1.201809221841-1.noarch.rpm
+#RUN yum install -y http://archive.mapr.com/releases/MEP/${MEP_VERSION}/redhat/mapr-spark-master-2.3.1.201809221841-1.noarch.rpm
 RUN yum install -y http://archive.mapr.com/releases/MEP/${MEP_VERSION}/redhat/mapr-spark-2.3.1.201809221841-1.noarch.rpm
 
 
