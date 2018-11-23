@@ -40,6 +40,8 @@ RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/red
 RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-client-6.1.0.20180926230239.GA-1.x86_64.rpm
 #RUN yum install -y http://archive.mapr.com/releases/MEP/${MEP_VERSION}/redhat/mapr-spark-master-2.3.1.201809221841-1.noarch.rpm
 RUN yum install -y http://archive.mapr.com/releases/MEP/${MEP_VERSION}/redhat/mapr-spark-2.3.1.201809221841-1.noarch.rpm
+RUN wget -v http://archive.mapr.com/releases/MEP/6.0.0/redhat/mapr-spark-master-2.3.1.201809221841-1.noarch.rpm
+RUN wget -v http://archive.mapr.com/releases/MEP/6.0.0/redhat/mapr-spark-2.3.1.201809221841-1.noarch.rpm
 
 
 
