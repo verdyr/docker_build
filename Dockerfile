@@ -12,7 +12,9 @@ ENV JAVA_VERSION_MAJOR=8 \
     MAPR_CLUSTER_VERSION=6.1.0 \
     MEP_VERSION=6.0.0
 
-RUN yum install -y less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} maven unzip make which nano vim gdb gcc strace route iproute traceroute ethtool net-tools && yum -q clean all
+RUN yum install -y epel-release
+
+RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} maven unzip make which nano vim gdb gcc strace route iproute traceroute ethtool net-tools && yum -q clean all
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
