@@ -45,11 +45,12 @@ ENV JAVA_VERSION_MAJOR=8 \
     SBT_VERSION_MAJOR=1 \
     SBT_VERSION_MINOR=2 \
     SBT_VERSION_MINOR_MINOR=2 \
-    MAPR_CLUSTER_VERSION=6.1.0
+    MAPR_CLUSTER_VERSION=6.1.0 \
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mapr/lib
 
 RUN yum install -y epel-release
 
-RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} maven unzip make which nano vim gdb gcc gcc-c++ strace route iproute traceroute ethtool net-tools nfs-utils npm && yum -q clean all
+RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} python-devel maven unzip make which nano vim gdb gcc gcc-c++ strace route iproute traceroute ethtool net-tools nfs-utils npm && yum -q clean all
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
@@ -75,7 +76,7 @@ RUN useradd verdyr
 ## mapr specific, separately
 RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-librdkafka-0.11.3.201803231414-1.noarch.rpm
 RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-client-6.1.0.20180926230239.GA-1.x86_64.rpm
-
+RUN pip install --global-option=build_ext --global-option="--library-dirs=/opt/mapr/lib" --global-option="--include-dirs=/opt/mapr/include/" mapr-streams-python
 
 
 ENV JAVA_MAX_MEM=1200m \
