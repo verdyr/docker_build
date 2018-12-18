@@ -10,11 +10,12 @@ ENV JAVA_VERSION_MAJOR=8 \
     SBT_VERSION_MINOR=2 \
     SBT_VERSION_MINOR_MINOR=3 \
     MAPR_CLUSTER_VERSION=6.1.0 \
-    MEP_VERSION=6.0.0
+    MEP_VERSION=6.0.0 \
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mapr/lib
 
 RUN yum install -y epel-release
 
-RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} maven unzip make which nano vim gdb gcc strace route iproute traceroute ethtool net-tools && yum -q clean all
+RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} python-devel maven unzip make which nano vim gdb gcc strace route iproute traceroute ethtool net-tools && yum -q clean all
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
@@ -43,6 +44,7 @@ RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/red
 
 RUN yum install -y http://package.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-posix-client-container-6.1.0.20180926230239.GA-1.x86_64.rpm
 RUN yum install -y http://archive.mapr.com/releases/MEP/MEP-${MEP_VERSION}/redhat/mapr-spark-2.3.1.201809221841-1.noarch.rpm
+RUN pip install --global-option=build_ext --global-option="--library-dirs=/opt/mapr/lib" --global-option="--include-dirs=/opt/mapr/include/" mapr-streams-python
 
  
 
