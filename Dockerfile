@@ -50,7 +50,7 @@ ENV JAVA_VERSION_MAJOR=8 \
 
 RUN yum install -y epel-release
 
-RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} python-devel maven unzip make which nano vim gdb gcc gcc-c++ strace route iproute traceroute ethtool net-tools nfs-utils npm && yum -q clean all
+RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} python2-pip python-devel maven unzip make which nano vim gdb gcc gcc-c++ strace route iproute traceroute ethtool net-tools nfs-utils npm && yum -q clean all
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
