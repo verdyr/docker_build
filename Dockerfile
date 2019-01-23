@@ -37,7 +37,7 @@ MAINTAINER verdyr
 #   Xfce
 
 
-ENV JAVA_VERSION_MAJOR=8 \
+ENV JAVA_VERSION_MAJOR=11 \
     JAVA_VERSION_MINOR=0 \
     JAVA_VERSION_BUILD=141 \
     GRADLE_VERSION_MAJOR=4 \
@@ -50,7 +50,9 @@ ENV JAVA_VERSION_MAJOR=8 \
 
 RUN yum install -y epel-release
 
-RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} python2-pip python-devel maven unzip make which nano vim gdb gcc gcc-c++ strace route iproute traceroute ethtool net-tools nfs-utils npm && yum -q clean all
+RUN yum install -y systemd less more git wget curl httpd python2-pip python-devel maven unzip make which nano vim gdb gcc gcc-c++ strace route iproute traceroute ethtool net-tools nfs-utils npm && yum -q clean all
+# RUN yum install -y java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} && yum -q clean all
+RUN yum install -y java-${JAVA_VERSION_MAJOR} && yum -q clean all
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
