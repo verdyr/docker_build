@@ -49,10 +49,18 @@ ENV JAVA_VERSION_MAJOR=11 \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mapr/lib
 
 RUN yum install -y epel-release
+RUN yum install -y centos-release-scl
+RUN yum --enablerepo=centos-sclo-rh-testing install -y rh-maven35-maven-compiler-plugin
+# for git 2.x from Wandisco repo
+RUN yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
 
-RUN yum install -y systemd less more git wget curl httpd python2-pip python-devel maven unzip make which nano vim gdb gcc gcc-c++ strace route iproute traceroute ethtool net-tools nfs-utils npm && yum -q clean all
-# RUN yum install -y java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} && yum -q clean all
-RUN yum install -y java-${JAVA_VERSION_MAJOR} && yum -q clean all
+RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}-openjdk-devel unzip make which nano vim gdb gcc gcc-c++ python36-pip.noarch python36-devel.x86_64 golang strace route iproute traceroute ethtool net-tools nfs-utils jq && yum -q clean all
+RUN cd /opt && wget -v https://www-eu.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz && tar zxvf apache-maven-3.6.0-bin.tar.gz && rm apache-maven-3.6.0-bin.tar.gz && /opt/apache-maven-3.6.0/bin/mvn -v
+RUN export PATH=/opt/apache-maven-3.6.0/bin:$PATH
+
+
+RUN mkdir -p ~/go/bin
+RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh &&  git clone https://github.com/operator-framework/operator-sdk /opt/operator-sdk && cd /opt/operator-sdk && git checkout master && make dep && make install
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
@@ -83,5 +91,7 @@ RUN pip install --global-option=build_ext --global-option="--library-dirs=/opt/m
 
 ENV JAVA_MAX_MEM=1200m \
     JAVA_MIN_MEM=1200m
+    
+    #RUN mkdir $HOME/go/bin && curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 CMD ["/bin/bash"]
