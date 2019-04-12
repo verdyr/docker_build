@@ -54,7 +54,7 @@ RUN yum --enablerepo=centos-sclo-rh-testing install -y rh-maven35-maven-compiler
 # for git 2.x from Wandisco repo
 RUN yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
 
-RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}-openjdk-devel unzip make which nano vim gdb gcc golang gcc-c++ python36-pip.noarch python36-devel.x86_64 golang strace route iproute traceroute ethtool net-tools nfs-utils jq && yum -q clean all
+RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}-openjdk-devel python2-pip python-devel unzip make which nano vim gdb gcc golang gcc-c++ python36-pip.noarch python36-devel.x86_64 golang strace route iproute traceroute ethtool net-tools nfs-utils jq && yum -q clean all
 RUN cd /opt && wget -v https://www-eu.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz && tar zxvf apache-maven-3.6.0-bin.tar.gz && rm apache-maven-3.6.0-bin.tar.gz && /opt/apache-maven-3.6.0/bin/mvn -v
 RUN export PATH=/opt/apache-maven-3.6.0/bin:$PATH
 
