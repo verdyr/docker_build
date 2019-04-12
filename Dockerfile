@@ -59,8 +59,8 @@ RUN cd /opt && wget -v https://www-eu.apache.org/dist/maven/maven-3/3.6.0/binari
 RUN export PATH=/opt/apache-maven-3.6.0/bin:$PATH
 
 
-RUN mkdir -p ~/go/bin
-RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh &&  git clone https://github.com/operator-framework/operator-sdk /opt/operator-sdk && cd /opt/operator-sdk && git checkout master && make dep && make install
+RUN git clone https://github.com/operator-framework/operator-sdk /opt/operator-sdk && cd /opt/operator-sdk
+# && git checkout master && make dep && make install
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
