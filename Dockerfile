@@ -45,7 +45,7 @@ RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/red
 RUN yum install -y http://archive.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-client-6.1.0.20180926230239.GA-1.x86_64.rpm
 
 RUN yum install -y http://package.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/redhat/mapr-posix-client-container-6.1.0.20180926230239.GA-1.x86_64.rpm
-RUN yum install -y http://archive.mapr.com/releases/MEP/MEP-${MEP_VERSION}/redhat/mapr-spark-2.3.1.201809221841-1.noarch.rpm
+RUN yum install -y http://archive.mapr.com/releases/MEP/MEP-${MEP_VERSION}/redhat/mapr-spark-2.3.2.0.201901301208-1.noarch.rpm
 RUN pip install --global-option=build_ext --global-option="--library-dirs=/opt/mapr/lib" --global-option="--include-dirs=/opt/mapr/include/" mapr-streams-python
 
  
