@@ -14,6 +14,8 @@ ENV JAVA_VERSION_MAJOR=8 \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mapr/lib
 
 RUN yum install -y epel-release
+RUN yum install -y centos-release-scl
+RUN yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
 
 RUN yum install -y systemd less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR} python2-pip python-devel maven unzip make which nano vim gdb gcc strace route iproute traceroute ethtool net-tools && yum -q clean all
 
