@@ -75,7 +75,7 @@ RUN yum install -y --disableplugin=subscription-manager http://archive.mapr.com/
 RUN pip3.6 install --global-option=build_ext --global-option="--library-dirs=/opt/mapr/lib" --global-option="--include-dirs=/opt/mapr/include/" mapr-streams-python
 
 
-RUN /opt/mapr/server/configure.sh -N cdp.cluster.name.org -c -secure -C cldb_node1:7222,cldb_node2:7222,cldb_node3:7222 -HS HS_node
+#RUN /opt/mapr/server/configure.sh -N cdp.cluster.name.org -c -secure -C cldb_node1:7222,cldb_node2:7222,cldb_node3:7222 -HS HS_node
 
 #RUN git config --global user.email "sergey.boldyrev@pwc.com" && git config --global user.name "Serguei Boldyrev"
 
