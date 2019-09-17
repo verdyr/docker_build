@@ -10,6 +10,9 @@ ENV JAVA_VERSION_MAJOR=8 \
     SBT_VERSION_MAJOR=1 \
     SBT_VERSION_MINOR=2 \
     SBT_VERSION_MINOR_MINOR=2 \
+    MVN_VERSION_MAJOR=3 \
+    MVN_VERSION_MINOR=6 \
+    MVN_VERSION_MINOR_MINOR=2 \    
     MAPR_CLUSTER_VERSION=6.1.0 \
     MEP_VERSION=6.1.0 \
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/mapr/lib
@@ -27,11 +30,13 @@ RUN yum install -y --disableplugin=subscription-manager http://mirror.centos.org
 RUN yum install -y --disableplugin=subscription-manager less more git wget curl httpd java-1.${JAVA_VERSION_MAJOR}.${JAVA_VERSION_MINOR}-openjdk-devel unzip make which nano vim gdb gcc gcc-c++ python36-pip.noarch python36-devel.x86_64 strace route iproute traceroute ethtool net-tools jq bind-utils && yum -q --disableplugin=subscription-manager clean all
 RUN yum update all -y --disableplugin=subscription-manager && yum -q --disableplugin=subscription-manager clean all
 
-RUN cd /opt && wget -v https://www-eu.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz && tar zxvf apache-maven-3.6.0-bin.tar.gz && rm apache-maven-3.6.0-bin.tar.gz && /opt/apache-maven-3.6.0/bin/mvn -v
-ENV PATH "/opt/apache-maven-3.6.0/bin:$PATH"
+RUN cd /opt && wget -v https://www-eu.apache.org/dist/maven/maven-3/${MVN_VERSION_MAJOR}.${MVN_VERSION_MINOR}.${MVN_VERSION_MINOR_MINOR}/binaries/apache-maven-${MVN_VERSION_MAJOR}.${MVN_VERSION_MINOR}.${MVN_VERSION_MINOR_MINOR}-bin.tar.gz && \ 
+    tar zxvf apache-maven-${MVN_VERSION_MAJOR}.${MVN_VERSION_MINOR}.${MVN_VERSION_MINOR_MINOR}-bin.tar.gz && \
+    rm apache-maven-${MVN_VERSION_MAJOR}.${MVN_VERSION_MINOR}.${MVN_VERSION_MINOR_MINOR}-bin.tar.gz && \
+    /opt/apache-maven-${MVN_VERSION_MAJOR}.${MVN_VERSION_MINOR}.${MVN_VERSION_MINOR_MINOR}/bin/mvn -v
+RUN export PATH=/opt/apache-maven-${MVN_VERSION_MAJOR}.${MVN_VERSION_MINOR}.${MVN_VERSION_MINOR_MINOR}/bin:$PATH
 
 #RUN git clone https://github.com/operator-framework/operator-sdk /opt/operator-sdk && cd /opt/operator-sdk && git checkout master && make dep && make install
-
 
 RUN cd /usr/share && \
 #    curl --fail --silent --location --retry 3 \
