@@ -1,6 +1,11 @@
 FROM       docker.io/centos:centos7.5.1804
 MAINTAINER verdyr
 
+ARG VERSION=1.15.0
+RUN echo $VERSION
+ARG MIRROR=http://apache.claz.org/drill
+RUN echo $MIRROR
+
 ENV JAVA_VERSION_MAJOR=8 \
     JAVA_VERSION_MINOR=0 \
     JAVA_VERSION_BUILD=141 \
@@ -48,9 +53,23 @@ RUN yum install -y http://package.mapr.com/releases/v${MAPR_CLUSTER_VERSION}/red
 RUN yum install -y http://archive.mapr.com/releases/MEP/MEP-${MEP_VERSION}/redhat/mapr-spark-2.3.2.0.201901301208-1.noarch.rpm
 RUN pip install --global-option=build_ext --global-option="--library-dirs=/opt/mapr/lib" --global-option="--include-dirs=/opt/mapr/include/" mapr-streams-python
 
- 
+# cluster specific
+# RUN /opt/mapr/server/configure.sh 
 
 ENV JAVA_MAX_MEM=1200m \
     JAVA_MIN_MEM=1200m
+
+RUN echo 'root:drill' | chpasswd
+
+ADD $MIRROR/drill-$VERSION/apache-drill-$VERSION.tar.gz /tmp/
+RUN mkdir /opt/drill
+RUN tar -zxf /tmp/apache-drill-$VERSION.tar.gz --directory=/opt/drill --strip-components 1
+RUN rm -f /tmp/apache-drill-$VERSION.tar.gz
+
+RUN chown -R root:root /opt/drill
+
+RUN echo "select * from sys.version;" > /tmp/version.sql
+RUN /opt/drill/bin/sqlline -u jdbc:drill:zk=local --run=/tmp/version.sql
+
 
 CMD ["/bin/bash"]
