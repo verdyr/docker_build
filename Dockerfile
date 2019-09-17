@@ -2,6 +2,12 @@ FROM       registry.access.redhat.com/ubi7/ubi
 #FROM       docker.io/centos:centos7.5.1804
 MAINTAINER verdyr
 
+ARG VERSION=1.15.0
+RUN echo $VERSION
+ARG MIRROR=http://apache.claz.org/drill
+RUN echo $MIRROR
+
+
 ENV JAVA_VERSION_MAJOR=8 \
     JAVA_VERSION_MINOR=0 \
     JAVA_VERSION_BUILD=141 \
@@ -73,7 +79,22 @@ RUN /opt/mapr/server/configure.sh -N cdp.cluster.name.org -c -secure -C cldb_nod
 
 #RUN git config --global user.email "sergey.boldyrev@pwc.com" && git config --global user.name "Serguei Boldyrev"
 
+# cluster specific
+# RUN /opt/mapr/server/configure.sh 
+
 ENV JAVA_MAX_MEM=1200m \
     JAVA_MIN_MEM=1200m
+
+RUN echo 'root:drill' | chpasswd
+
+ADD $MIRROR/drill-$VERSION/apache-drill-$VERSION.tar.gz /tmp/
+RUN mkdir /opt/drill
+RUN tar -zxf /tmp/apache-drill-$VERSION.tar.gz --directory=/opt/drill --strip-components 1
+RUN rm -f /tmp/apache-drill-$VERSION.tar.gz
+
+RUN chown -R root:root /opt/drill
+
+RUN echo "select * from sys.version;" > /tmp/version.sql
+RUN /opt/drill/bin/sqlline -u jdbc:drill:zk=local --run=/tmp/version.sql
 
 CMD ["/bin/bash"]
