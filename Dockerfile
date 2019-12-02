@@ -4,6 +4,11 @@ FROM alpine:3.5
 
 ENV NGINX_VERSION=1.14.1
 
+#UNCOMMENT THIS AND PUT YOUR certs/key here
+#ADD k8s_nodes.key /etc/nginx/
+#ADD k8s_nodes.crt /etc/nginx/
+#ADD k8s_nodes.ca.crt /etc/nginx/
+
 RUN set -x \
  && mkdir -p \
       /tmp/src/nginx \
