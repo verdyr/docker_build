@@ -1,6 +1,7 @@
 Automated builds for:
 
 Dev with Nginx (latest is 1.14.1, not spotted in the CVEs list)
+https://www.cvedetails.com/product/17956/Nginx-Nginx.html?vendor_id=10048
 
 Prepare cert and key and ca.cert in advance and put them to the /etc/nginx/ in docker image
 
