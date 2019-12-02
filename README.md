@@ -2,6 +2,92 @@ Automated builds for:
 
 Dev with Nginx (latest is 1.14.1, not spotted in the CVEs list)
 
+Prepare cert and key and ca.cert in advance and put them to the /etc/nginx/ in docker image
+
+deployments.app
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-ldap-auth-proxy
+  name: nginx-ldap-auth-proxy
+  namespace: NAMESPACE_NAME
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: nginx-ldap-auth-proxy
+      release: nginx-ldap-auth
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-ldap-auth-proxy
+        release: nginx-ldap-auth
+    spec:
+      containers:
+      - env:
+        - name: LDAP_BIND_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: ldapBindPassword
+              name: nginx-ldap-auth-proxy
+        image: docker.io/verdyr/nginx-ldap:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /_ping
+            port: 443
+            scheme: HTTPS
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: nginx-ldap-auth-proxy
+        ports:
+        - containerPort: 443
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /_ping
+            port: 443
+            scheme: HTTPS
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          name: config
+          subPath: nginx.conf
+      dnsPolicy: Default
+      imagePullSecrets:
+      - name: YOUR_SECRET_HERE
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: nginx-operator
+      serviceAccountName: nginx-operator
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: nginx-ldap-auth-proxy
+        name: config
+```
+
 
 Use nginx.conf via Configmap in K8s namespace of your choice
 
