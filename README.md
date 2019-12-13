@@ -3,7 +3,7 @@ Automated builds for:
 Dev with Nginx (1.14.1 is used, CVEs list)
 https://www.cvedetails.com/product/17956/Nginx-Nginx.html?vendor_id=10048
 
-Prepare cert and key and ca.cert in advance and put them to the /etc/nginx/ in docker image
+Prepare cert and key and ca.cert in advance and ADD them to the /etc/nginx/ during docker image build
 
 deployments.app
 
