@@ -113,7 +113,9 @@ data:
         worker_connections 1024;
     }
     http {
- 
+
+        limit_req_zone $binary_remote_addr zone=pwclimit:5m rate=10r/s;
+        
         upstream backend-server {
             server APP_BACKEND_SERVER_FQDN:PORT_NUM;
         }
@@ -144,14 +146,28 @@ data:
             error_log /var/log/nginx/error.log debug;
             access_log /var/log/nginx/access.log;
  
-            client_max_body_size 0;
- 
+            server_tokens off;
+            client_body_buffer_size 1k;
+            client_header_buffer_size 1k;
+            client_max_body_size 1k;
+            large_client_header_buffers 2 1k;
+
+            client_body_timeout 10;
+            client_header_timeout 10;
+            keepalive_timeout 5 5;
+            send_timeout 10;
+            
             chunked_transfer_encoding on;
+            
+            location /uploads/ {
+                deny all;
+            }
  
             location / {
                 auth_ldap "Auth Required";
                 auth_ldap_servers ldapserver;
                 proxy_set_header  X-Ldap-Starttls "true";
+                proxy_set_header                 Accept-Encoding "";                
                 proxy_pass                       https://backend-server;
                 proxy_ssl_verify                 off;
                 proxy_set_header  Host           $http_host;   # required for docker client's sake
@@ -159,6 +175,11 @@ data:
                 proxy_set_header  Authorization  ""; # see https://github.com/dotcloud/docker-registry/issues/170
                 proxy_set_header  X_FORWARDED_PROTO https;
                 proxy_read_timeout               900;
+ 
+                proxy_hide_header 'Access-Control-Allow-Origin';
+                proxy_hide_header 'Access-Control-Allow-Methods';
+                proxy_hide_header 'Access-Control-Allow-Headers';
+                limit_req zone=pwclimit;
  
                 if ($request_method = 'OPTIONS') {
                    add_header 'Access-Control-Allow-Origin' '*.domain2.com, *.domain1.com';
